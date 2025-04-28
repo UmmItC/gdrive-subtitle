@@ -2,6 +2,7 @@ import json
 import subprocess
 import os
 import sys
+import argparse
 from datetime import timedelta
 
 def convert_ms_to_srt_time(ms):
@@ -76,29 +77,32 @@ def embed_subtitles(video_file, srt_file, output_file):
     subprocess.run(cmd)
 
 def main():
-    if len(sys.argv) != 2:
-        print("Usage: python embed_subtitles.py <video_file>")
+    parser = argparse.ArgumentParser(description='Embed subtitles into video')
+    parser.add_argument('--source', required=True,
+                      help='Input video file')
+    parser.add_argument('--json', required=True,
+                      help='JSON subtitle file')
+    parser.add_argument('--output', required=True,
+                      help='Output video file')
+    
+    args = parser.parse_args()
+    
+    if not os.path.exists(args.source):
+        print(f"Error: Video file '{args.source}' not found!")
         sys.exit(1)
         
-    video_file = sys.argv[1]
-    if not os.path.exists(video_file):
-        print(f"Error: Video file '{video_file}' not found!")
-        sys.exit(1)
-        
-    json_file = 'timedtext.json'
-    if not os.path.exists(json_file):
-        print(f"Error: JSON subtitle file '{json_file}' not found!")
+    if not os.path.exists(args.json):
+        print(f"Error: JSON subtitle file '{args.json}' not found!")
         sys.exit(1)
     
-    srt_file = 'subtitles.srt'
+    srt_file = os.path.splitext(args.output)[0] + '.srt'
     print("Converting JSON to SRT format...")
-    num_subtitles = json_to_srt(json_file, srt_file)
+    num_subtitles = json_to_srt(args.json, srt_file)
     print(f"Generated {num_subtitles} subtitles in {srt_file}")
     
-    output_file = f"output_with_subtitles.mp4"
     print("Embedding subtitles into video...")
-    embed_subtitles(video_file, srt_file, output_file)
-    print(f"Done! Output saved as {output_file}")
+    embed_subtitles(args.source, srt_file, args.output)
+    print(f"Done! Output saved as {args.output}")
 
 if __name__ == "__main__":
     main() 
