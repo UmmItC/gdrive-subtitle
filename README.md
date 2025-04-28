@@ -47,7 +47,7 @@ paru -S ffmpeg
 ```
 
 ## Usage
-o
+
 ```bash
 python embed_subtitles.py --source <video_file> --json <json_file> --output <output_file>
 ```
