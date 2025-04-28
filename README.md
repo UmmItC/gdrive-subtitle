@@ -1,4 +1,4 @@
-# gdrive-dl
+# gdrive-subtitle
 
 A Python tool for embedding subtitles from Google Drive video captions (JSON format) into video files.
 
@@ -47,22 +47,21 @@ paru -S ffmpeg
 ```
 
 ## Usage
-
+o
 ```bash
-python embed_subtitles.py <video_file>
+python embed_subtitles.py --source <video_file> --json <json_file> --output <output_file>
 ```
 
 Example:
 ```bash
-python embed_subtitles.py lecture.mp4
+python embed_subtitles.py --source lecture.mp4 --json timedtext.json --output lecture_with_subtitles.mp4
 ```
 
 The script will:
 
-1. Look for `timedtext.json` in the current directory
-2. Convert it to SRT format
-3. Embed the subtitles into your video
-4. Output as `output_with_subtitles.mp4`
+1. Convert the specified JSON subtitle file to SRT format
+2. Embed the subtitles into your video
+3. Save the output with the specified filename
 
 ## License
 
